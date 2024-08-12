@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<robot name="walle_sim" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="robot_name" default="walle"/>
+
+  <xacro:macro name="walle_sim" params="robot_name">
+
+    <gazebo reference="chassis">
+        <material>Gazebo/Orange</material>
+        <mu1 value="0.001"/>
+        <mu2 value="0.001"/>
+      </gazebo>
+
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Blue</material>
+      </gazebo>
+	
+    <gazebo reference="right_wheel">
+          <material>Gazebo/Blue</material>
+      </gazebo>
+      
+    <gazebo reference="caster_wheel">
+          <material>Gazebo/Blue</material>
+          <mu1 value="0.001"/>
+          <mu2 value="0.001"/>
+      </gazebo>	  
+
+    <gazebo>
+    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+
+        <ros>
+            <namespace>${robot_name}</namespace>
+            <argument>cmd_vel:=${robot_name}/cmd_vel</argument>
+            <argument>odom:=${robot_name}/odom</argument>
+        </ros>
+        
+        <!-- Wheel Information -->
+        <left_joint>left_wheel_joint</left_joint>
+        <right_joint>right_wheel_joint</right_joint>
+        <wheel_separation>0.12</wheel_separation>
+        <wheel_diameter>0.04</wheel_diameter>
+
+
+        <!-- Limits -->
+        <max_wheel_torque>200</max_wheel_torque>
+        <max_wheel_acceleration>10.0</max_wheel_acceleration>
+
+        
+        <!-- Output -->
+        <odometry_frame>${robot_name}/odom</odometry_frame>
+        <robot_base_frame>${robot_name}/base_link</robot_base_frame>
+
+        <publish_odom>true</publish_odom>
+        <publish_odom_tf>true</publish_odom_tf>
+        <publish_wheel_tf>false</publish_wheel_tf>
+
+    </plugin>
+      </gazebo>
+          
+  </xacro:macro>
+</robot>
